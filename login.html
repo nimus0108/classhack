@@ -9,14 +9,88 @@
 		<form role="form">
 		  <div class="form-group">
 		    <label for="emailid">Email address</label>
-		    <input type="email" class="form-control" id="emailid" placeholder="Enter email">
+		    <input type="email" class="form-control loginEmail" id="emailid" placeholder="Enter email">
 		  </div>
 		  <div class="form-group">
 		    <label for="exampleInputPassword1">Password</label>
-		    <input type="password" class="form-control" id="password" placeholder="Password">
+		    <input type="password" class="form-control loginPassword" id="password" placeholder="Password">
 		  </div>
 		  <button type="submit" class="btn btn-default">Submit</button>
 		</form>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+
+	    <script type="text/javascript">
+	      Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
+
+	      function getUsernameValue () {
+	        return $(".loginEmail").val();
+	      }
+
+	      function thereIsNotAUsername () {
+	        if (getUsernameValue() === "") {
+	          //alert("There is not a username");
+	          return true;
+	        }
+	        else {
+	          //alert("There is a username");
+	          return false;
+	        }
+	      }
+
+	      function getPasswordValue () {
+	        return $(".loginPassword").val();
+	      }
+
+	      function thereIsNotAPassword () {
+	        if (getPasswordValue() === "") {
+	          //alert("There is not a password");
+	          return true;
+	        }
+	        else {
+	          //alert("There is a password");
+	          return false;
+	        }
+	      }
+
+	      $("form").on("submit", function(e) {
+	        e.preventDefault();
+
+	        if (thereIsNotAnEmail()) {
+	          alert("Please enter an email");
+	        }
+	        else if (thereIsNotAPassword()) {
+	          alert("Please enter a password");
+	        }
+	        else {
+	          Parse.User.logIn($(".loginEmail").val(), $(".loginPassword").val(), {
+	            success: function(user) {
+	              window.location.href = 'home.html';
+	            },
+	            error: function(user, error) {
+	              if (error.code === Parse.Error.CONNECTION_FAILED) {
+	                alert("Uh oh, we couldn't connect to the Parse Cloud! Please try again.");
+	              }
+	              else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+	                alert("Parse is having a problem. Please try again later.");
+	              }
+	              else if (error.code === 101) {
+	                alert(" The username and/or password entered do not match any current users. Please try again.");
+	              }
+	              else if (error.code === Parse.Error.TIMEOUT) {
+	                alert("The request timed out. Please try again.");
+	              }
+	              else {
+	                alert("Error logging in. Please try again.");
+	              }
+	            }
+	          })
+	        }
+
+	      });
+	    </script>
+
 	</body>
     
 </html>
