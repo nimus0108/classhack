@@ -1,5 +1,7 @@
+.mainpage{
+    background-image:url('mainpagebackground.jpg');
+}
+
 .title{
     font-family: 'Ubuntu', sans-serif;
-    background-image: url("../img/mainpagebackground.jpg");
-    display: block;
 }
