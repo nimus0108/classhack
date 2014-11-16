@@ -9,13 +9,7 @@ body{
 }
 
 .res-page{
-    display: table;
-    background-image:url("../img/mainpagebackground.jpg");
-    height: 100%;
-    width: 100%;
-    background-size:cover;
-    background-repeat: no-repeat;
-    
+
 }
 
 body a{
