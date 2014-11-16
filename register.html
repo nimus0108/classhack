@@ -143,25 +143,6 @@
                 });
             }
 
-            function login () {
-                Parse.User.logIn($(".registerEmail").val(), $(".registerPassword").val(), {
-                  success: function(user) {
-                    window.location.href = "home.html";
-                  },
-                  error: function(user, error) {
-                    if (error.code === Parse.Error.CONNECTION_FAILED) {
-                      alert("Uh oh, we couldn't connect to the Parse Cloud! Please try again.");
-                    }
-                    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
-                      alert("Parse is having a problem. Please try again later.");
-                    }
-                    else {
-                      alert("There was an error logging in. Please try again.");
-                    }
-                  }
-                });
-            }
-
             $("form").on("submit", function(e) {
                 e.preventDefault();
 
