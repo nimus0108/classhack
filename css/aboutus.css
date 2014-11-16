@@ -14,9 +14,10 @@ p{
 .bio{
 	width: 700px;
   margin: 35px;
-  background: rgba(0,63,76,0.5);
+  background: rgba(0,63,76,0.7);
   padding: 35px;
-  border-radius: 50px
+  border-radius: 50px;
+  color:#FFF;
 }
 
 .ali{
