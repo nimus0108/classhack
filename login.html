@@ -70,7 +70,7 @@
 	      function login () {
 	      	Parse.User.logIn($(".loginEmail").val(), $(".loginPassword").val(), {
 	            success: function(user) {
-	              window.location.href = 'home.html';
+	              window.location.href = 'school.html';
 	            },
 	            error: function(user, error) {
 	              if (error.code === Parse.Error.CONNECTION_FAILED) {

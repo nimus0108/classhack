@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <link href = "css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	    <link href='http://fonts.googleapis.com/css?family=Ubuntu:500,500italic' rel='stylesheet' type='text/css'>
+        <link href='css/main.css' rel='stylesheet' type='text/css'>
+
+	</head>
+    
+    
+	<body>
+
+		<div>
+			<button type="button" class="addSchool">Add a school</button>
+			<div>
+				<select class="form-control schools">
+
+				</select>
+			</div>
+            <button type="button" class="toSubject">Submit</button>
+        </div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.19.min.js"></script>
+
+		<script type="text/javascript">
+			Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
+
+			$(".toSubject").click(function() {
+		        window.location.href = 'subject.html';
+		    });
+
+			function searchForSchools (callback) {
+				//Finding most recently created images and adding to imageScroll
+				var school = Parse.Object.extend("school");
+				var schoolQuery = new Parse.Query(school);
+				schoolQuery.ascending("name");
+				schoolQuery.find({
+				  success: function(results) {
+				    //alert("Found most recently uploaded images");
+				    callback(results);
+				  },
+				  error: function(error) {
+				    if (error.code === Parse.Error.CONNECTION_FAILED) {
+				      alert("Uh oh, we couldn't connect to the Parse Cloud to find new images! Please try again.");
+				    }
+				    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+				      alert("Parse is having a problem. Please try again later.");
+				    }
+				    else if (error.code === Parse.Error.TIMEOUT) {
+				      alert("The request timed out. Please try again.");
+				    }
+				    else {
+				      alert("There was an error finding new images. Please try again.");
+				    }
+				  }
+				});
+			}
+
+			function addHTMLForEach (individualSchool, schools) {
+		        var schoolObject = schools[individualSchool];
+		        $(".schools").append(
+		          "<option>" + schoolObject.get('name') +
+		              "</option>");
+		    }
+
+		    searchForSchools(function (schools) {
+		    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
+		    		addHTMLForEach(eachSchool, schools);
+		    	}
+		    });
+		</script>
+	</body>
+
+</html>

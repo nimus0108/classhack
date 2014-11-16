@@ -13,10 +13,6 @@
                     <input type="name" class="form-control registerName" id="registername" placeholder="Name">
                 </div>
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control registerSchool" id="registerschool" placeholder="School">
-                </div>
-                <div class="form-group">
                     <label for="emailid">Email address</label>
                     <input type="email" class="form-control registerEmail" id="registeremail" placeholder="Enter email">
                 </div>
@@ -49,17 +45,6 @@
                 }
               //alert("There is a name");
               return false;
-            }
-
-            function getSchoolValue () {
-                return $(".registerSchool").val();
-            }
-
-            function thereIsNotASchool () {
-                if (getSchoolValue() === "") {
-                    return true;
-                }
-                return false;
             }
 
             function getEmailValue () {
@@ -172,7 +157,7 @@
                     createNewUser (function () {
                         Parse.User.logIn($(".registerEmail").val(), $(".registerPassword").val(), {
                           success: function(user) {
-                            window.location.href = "home.html";
+                            window.location.href = "school.html";
                           },
                           error: function(user, error) {
                             if (error.code === Parse.Error.CONNECTION_FAILED) {
