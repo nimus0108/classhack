@@ -54,7 +54,6 @@ li {
 .nav-bar a{
     font-size: 1.5em;
     text-decoration: none;
-    
 }
 
 #navbar {
@@ -90,4 +89,12 @@ body a{
 
 body a:hover {
     text-decoration: none;
+}
+
+.fileLink {
+    text-align: right;
+    display: inline-block;
+    vertical-align: top;
+    height: auto;
+    height: 100%;
 }
