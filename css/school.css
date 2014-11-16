@@ -1,0 +1,17 @@
+body{
+	background-image: url('../img/a.jpg');
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+.upload{
+	width: 300px;
+    margin: 40px;
+    background: rgba(0,0,25,0.7);
+    padding: 45px;
+    margin-bottom: auto;
+    color: #FFF;
+}
