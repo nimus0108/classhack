@@ -9,7 +9,7 @@ body{
 
 body{
     display: table;
-    background-image:url("../img/mainpagebackground.jpg");
+    background-     image:url("../img/mainpagebackground.jpg");
     height: 100%;
     width: 100%;
     background-size:cover;
@@ -18,16 +18,16 @@ body{
 
 .account{
     font-size: 30px;
-    color: #097054;x
+    color: #097054;
     font-family: 'Kaushan Script', cursive;
 }
 
 .login{
     width: 300px;
-  margin: 40px;
-  background: rgba(0,0,25,0.4);
-  padding: 45px;
-  margin-bottom: auto;
+    margin: 40px;
+    background: rgba(0,0,25,0.4);
+    padding: 45px;
+    margin-bottom: auto;
 
   /* border-radius: 50px; */
 }
