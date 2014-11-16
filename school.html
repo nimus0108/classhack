@@ -11,7 +11,15 @@
 	<body>
 
 		<div>
-			<button type="button" class="addSchool">Add a school</button>
+			<div>
+				<form role="form">
+					<div class="form-group">
+		            <label for="schoolName">School</label>
+		            <input type="text" class="form-control schoolName" placeholder="Enter school name">
+		          	</div>
+					<button type="button" class="addNewSchool">Add a school</button>
+				</form>
+			</div>
 			<div>
 				<select class="form-control schools">
 
@@ -29,6 +37,35 @@
 			$(".toSubject").click(function() {
 		        window.location.href = 'subject.html';
 		    });
+
+		    function getSchoolValue () {
+		    	return $(".schoolName").val();
+		    }
+
+		    function addSchool (callback) {
+		    	var school = Parse.Object.extend("school");
+		    	var newSchool = new school();
+
+		    	newSchool.set("name", getSchoolValue());
+
+		    	newSchool.save(null, {
+		    		success: function(newSchool) {
+		    			alert("Successfully created new school");
+		    			callback();
+		    		},
+		    		error: function(newSchool, error) {
+		    			alert("Error");
+		    		}
+		    	});
+		    }
+
+		    function clearInput () {
+		    	$(".schoolName").val("");
+		    }
+
+		    function clearSchools () {
+		    	$(".schools").html("");
+		    }
 
 			function searchForSchools (callback) {
 				//Finding most recently created images and adding to imageScroll
@@ -68,6 +105,18 @@
 		    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
 		    		addHTMLForEach(eachSchool, schools);
 		    	}
+		    });
+
+		    $(".addNewSchool").click(function() {
+		    	addSchool(function () {
+		    		clearInput();
+		    		clearSchools();
+			    	searchForSchools(function (schools) {
+				    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
+				    		addHTMLForEach(eachSchool, schools);
+				    	}
+				    });
+		    	});
 		    });
 		</script>
 	</body>
