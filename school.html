@@ -28,6 +28,15 @@
 
 				</select>
 			</div>
+			<div>
+				<form role="form">
+					<div class="form-group">
+		            <label for="subjectName">Subject</label>
+		            <input type="text" class="form-control subjectName" placeholder="Enter subject name">
+		          	</div>
+					<button type="button" class="addNewSubject">Add a subject</button>
+				</form>
+			</div>
 			<div class="chooseSubjects">
 				<div>
 					Choose subject
@@ -44,27 +53,31 @@
 		<script type="text/javascript">
 			Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
 
-			$(".toSubject").click(function() {
-		        window.location.href = 'subject.html';
-		    });
-
 		    function getSchoolInputValue () {
 		    	return $(".schoolName").val();
+		    }
+
+		    function getSubjectInputValue () {
+		    	return $(".subjectName").val();
 		    }
 
 		    function getSchoolValue () {
 		    	return $(".schools").val();
 		    }
 
+		    function getSubjectValue () {
+		    	return $(".subjects").val();
+		    }
+
 		    function addSchool (callback) {
 		    	var school = Parse.Object.extend("school");
 		    	var newSchool = new school();
 
-		    	newSchool.set("name", getInputSchoolValue());
+		    	newSchool.set("name", getSchoolInputValue());
 
 		    	newSchool.save(null, {
 		    		success: function(newSchool) {
-		    		//alert("Successfully created new school");
+		    			//alert("Successfully created new school");
 		    			callback();
 		    		},
 		    		error: function(newSchool, error) {
@@ -73,19 +86,77 @@
 		    	});
 		    }
 
-		    function inputIsEmpty () {
+		    function searchForChosenSchool (callback) {
+				var chosenSchool = Parse.Object.extend("school");
+				var chosenSchoolQuery = new Parse.Query(chosenSchool);
+				chosenSchoolQuery.equalTo("name", getSchoolValue());
+				chosenSchoolQuery.first({
+					success: function(school) {
+						callback(school);
+					},
+					error: function(error) {
+						if (error.code === Parse.Error.CONNECTION_FAILED) {
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find new images! Please try again.");
+					    }
+					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+					      alert("Parse is having a problem. Please try again later.");
+					    }
+					    else if (error.code === Parse.Error.TIMEOUT) {
+					      alert("The request timed out. Please try again.");
+					    }
+					    else {
+					      alert("There was an error finding the school. Please try again.");
+					    }
+					}
+				});
+			}
+
+		    function addSubject (schoolObject, callback) {
+		    	var subject = Parse.Object.extend("subject");
+		    	var newSubject = new subject();
+
+		    	newSubject.set("name", getSubjectInputValue());
+		    	newSubject.set("school", schoolObject);
+
+		    	newSubject.save(null, {
+		    		success: function(newSubject) {
+		    			//alert("Successfully created new subject");
+		    			callback();
+		    		},
+		    		error: function(newSubject, error) {
+		    			alert("Error");
+		    		}
+		    	});
+		    }
+
+		    function schoolInputIsEmpty () {
 		    	if (getSchoolValue() === "") {
 		    		return true;
 		    	}
 		    	return false;
 		    }
 
-		    function clearInput () {
+		    function subjectInputIsEmpty () {
+		    	if (getSubjectValue() === "") {
+		    		return true;
+		    	}
+		    	return false;
+		    }
+
+		    function clearSchoolInput () {
 		    	$(".schoolName").val("");
+		    }
+
+		    function clearSubjectInput () {
+		    	$(".subjectName").val("");
 		    }
 
 		    function clearSchools () {
 		    	$(".schools").html("");
+		    }
+
+		    function clearSubjects () {
+		    	$(".subjects").html("");
 		    }
 
 			function searchForSchools (callback) {
@@ -112,31 +183,6 @@
 				      alert("There was an error finding schools. Please try again.");
 				    }
 				  }
-				});
-			}
-
-			function searchForChosenSchool (callback) {
-				var chosenSchool = Parse.Object.extend("school");
-				var chosenSchoolQuery = new Parse.Query(chosenSchool);
-				chosenSchoolQuery.equalTo("name", getSchoolValue());
-				chosenSchoolQuery.first({
-					success: function(school) {
-						callback(school);
-					},
-					error: function(error) {
-						if (error.code === Parse.Error.CONNECTION_FAILED) {
-					      alert("Uh oh, we couldn't connect to the Parse Cloud to find new images! Please try again.");
-					    }
-					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
-					      alert("Parse is having a problem. Please try again later.");
-					    }
-					    else if (error.code === Parse.Error.TIMEOUT) {
-					      alert("The request timed out. Please try again.");
-					    }
-					    else {
-					      alert("There was an error finding the school. Please try again.");
-					    }
-					}
 				});
 			}
 
@@ -188,12 +234,12 @@
 		    });
 
 		    $(".addNewSchool").click(function() {
-		    	if (inputIsEmpty()) {
+		    	if (schoolInputIsEmpty()) {
 		    		alert("Please enter a school");
 		    	}
 		    	else {
 			    	addSchool(function () {
-			    		clearInput();
+			    		clearSchoolInput();
 			    		clearSchools();
 				    	searchForSchools(function (schools) {
 					    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
@@ -204,9 +250,29 @@
 			    }
 		    });
 
+		    $(".addNewSubject").click(function() {
+		    	if (subjectInputIsEmpty()) {
+		    		alert("Please enter a subject");
+		    	}
+		    	else {
+			    	searchForChosenSchool(function (school) {
+				    	addSubject(school, function () {
+				    		clearSubjectInput();
+			    			clearSubjects();
+			    			searchForSubjectsBasedOnSchool (school, function (listOfSubjects) {
+			    				for (var eachSubject = 0; eachSubject < listOfSubjects.length; eachSubject++) {
+						    		addSubjectHTMLForEach(eachSubject, listOfSubjects);
+						    	}
+			    			});
+					    });
+			    	});
+			    }
+		    });
+
 		    $(".schools").change(function () {
 		    	searchForChosenSchool(function (school) {
 		    		searchForSubjectsBasedOnSchool(school, function (subjects) {
+		    			clearSubjects();
 		    			for (var eachSubject = 0; eachSubject < subjects.length; eachSubject++) {
 			    			addSubjectHTMLForEach(eachSubject, subjects);
 			    		}
