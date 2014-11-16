@@ -18,19 +18,23 @@ body{
     font-family: 'Kaushan Script', cursive;
 }
 
-.login{
+.poop{
     width: 300px;
     margin: 40px;
     background: rgba(0,0,25,0.7);
     padding: 45px;
     margin-bottom: auto;
     color: #FFF;
+}
+.login{    
+    text-align: left;
 
   /* border-radius: 50px; */
 }
 
 .pass{
     padding-top: 10%;
+
 }
 
 .btn-default{
@@ -68,6 +72,7 @@ body{
     font-size: 2.0em;
     text-align: center;
     height: auto;
+
 }
 
 .mpbtn {

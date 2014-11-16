@@ -29,11 +29,13 @@ body{
 }
 
 .main-content h1{
+
     display: block;
     font-size: 2.0em;
     text-align: center;
     height: auto;
     margin-bottom: 5%;
+    font-family: 'Montserrat', sans-serif; 
 }
 
 .main-content h3 {
@@ -68,10 +70,16 @@ COLOR
 ****************/
 
 body a{
-    color: white;
+    color: #097054;
     font-size: 4.0em;
+       -webkit-transition: all .3s ease;
+-moz-transition: all .3s ease;
+-ms-transition: all .3s ease;
+-o-transition: all .3s ease;
+transition: all .3s ease;
 }
 
 body a:hover {
     text-decoration: none;
+
 }
