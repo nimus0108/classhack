@@ -25,10 +25,10 @@ body{
 }
 
 .btn-default{
-   margin-top: 33px;
+    margin-top: 33px;
     background-color: transparent;
     font-size: 40px;
-    padding: 10%;
+    padding: 2%;
 
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
