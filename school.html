@@ -45,6 +45,13 @@
 
 				</select>
 			</div>
+			<div>
+				<div>
+					Notes
+				</div>
+				<input type="file" accept=".pdf" id="note">
+				<button type="submit" class="upload">Upload</button>
+			</div>
         </div>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -52,6 +59,41 @@
 
 		<script type="text/javascript">
 			Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
+
+			function uploadFile (chosenFile, subjectObject, callback) {
+				var file = chosenFile.files[0];
+				var name = document.getElementById("note").value;;
+			 
+				var parseFile = new Parse.File(name, file, "application/pdf");
+				parseFile.save().then(function() {
+				  // The file has been saved to Parse.
+				  var file = Parse.Object.extend("file");
+				  var newFile = new file();
+				  newFile.set("url", parseFile.url());
+				  newFile.set("subject", subjectObject);
+				  newFile.save(null, {
+				  	success: function () {
+
+				  	},
+				  	error: function () {
+
+				  	}
+				  });
+				}, function(error) {
+				  // The file either could not be read, or could not be saved to Parse.
+				});
+			}
+
+			$(".upload").click(function () {
+				var fileUploadControl = $("#note")[0];
+				if (fileUploadControl.files.length > 0) {
+					searchForChosenSubject(function (subject) {
+						uploadFile(fileUploadControl, subject, function () {
+							location.reload();
+						});
+					});
+				}
+			});
 
 		    function getSchoolInputValue () {
 		    	return $(".schoolName").val();
@@ -96,7 +138,7 @@
 					},
 					error: function(error) {
 						if (error.code === Parse.Error.CONNECTION_FAILED) {
-					      alert("Uh oh, we couldn't connect to the Parse Cloud to find new images! Please try again.");
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find schools! Please try again.");
 					    }
 					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
 					      alert("Parse is having a problem. Please try again later.");
@@ -106,6 +148,31 @@
 					    }
 					    else {
 					      alert("There was an error finding the school. Please try again.");
+					    }
+					}
+				});
+			}
+
+			function searchForChosenSubject (callback) {
+				var chosenSubject = Parse.Object.extend("subject");
+				var chosenSubjectQuery = new Parse.Query(chosenSubject);
+				chosenSubjectQuery.equalTo("name", getSubjectValue());
+				chosenSubjectQuery.first({
+					success: function(subject) {
+						callback(subject);
+					},
+					error: function(error) {
+						if (error.code === Parse.Error.CONNECTION_FAILED) {
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find subjects! Please try again.");
+					    }
+					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+					      alert("Parse is having a problem. Please try again later.");
+					    }
+					    else if (error.code === Parse.Error.TIMEOUT) {
+					      alert("The request timed out. Please try again.");
+					    }
+					    else {
+					      alert("There was an error finding the subject. Please try again.");
 					    }
 					}
 				});
@@ -130,14 +197,14 @@
 		    }
 
 		    function schoolInputIsEmpty () {
-		    	if (getSchoolValue() === "") {
+		    	if (getSchoolInputValue() === "") {
 		    		return true;
 		    	}
 		    	return false;
 		    }
 
 		    function subjectInputIsEmpty () {
-		    	if (getSubjectValue() === "") {
+		    	if (getSubjectInputValue() === "") {
 		    		return true;
 		    	}
 		    	return false;

@@ -83,3 +83,7 @@ body a:hover {
     text-decoration: none;
 
 }
+
+#note {
+    margin-bottom: 0px;
+}
