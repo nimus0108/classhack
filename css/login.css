@@ -16,6 +16,18 @@ body{
     background-repeat: no-repeat;
 }
 
+.login{
+    width: 300px;
+  margin: 40px;
+  background: rgba(0,0,25,0.4);
+  padding: 45px;
+  border-radius: 50px
+}
+
+.pass{
+    padding-top: 10%;
+}
+
 .main-container {
     display: table-cell;
     vertical-align: middle;
