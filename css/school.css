@@ -11,7 +11,31 @@ body{
 	width: 300px;
     margin: 40px;
     background: rgba(0,0,25,0.7);
-    padding: 45px;
-    margin-bottom: auto;
+    padding: 51px;
+    
     color: #FFF;
+}
+
+.school{
+	color:#FFF;
+}
+
+.sub{
+	color:#fff;
+}
+
+.butt{
+   margin-top: 20px;
+    background-color: transparent;
+    font-size: 200px;
+
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -ms-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.btn-default:hover{
+   background-color: #f0f;
 }
