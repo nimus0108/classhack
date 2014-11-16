@@ -12,56 +12,67 @@
 
 		<div><center>
 			<div class="upload">
-			<div>
-				<form role="form">
-					<div class="form-group">
-						
-		            <label for="schoolName"> <div class="school">School </div></label>
-		            	
-		            <input type="text" class="form-control schoolName" placeholder="Enter school name">
-		          	</div>
-					<button type="button" class="addNewSchool">Add a school</button>
-				</form>
-			</div>
-			<div class="chooseSchools">
 				<div>
-					Choose school
+					<form role="form">
+						<div class="form-group">
+							
+			            <label for="schoolName"> <div class="school">School </div></label>
+			            	
+			            <input type="text" class="form-control schoolName" placeholder="Enter school name">
+			          	</div>
+						<button type="button" class="addNewSchool">Add a school</button>
+					</form>
 				</div>
-				<select class="form-control schools">
+				<div class="chooseSchools">
+					<div>
+						Choose school
+					</div>
+					<select class="form-control schools">
+						<option>
+						</option>
 
-				</select>
-			</div>
-			<div>
-				<form role="form">
-					<div class="form-group">
-		            <label for="subjectName"><div class="sub">Subject </div> </label>
-		            <input type="text" class="form-control subjectName" placeholder="Enter subject name">
-		          	</div>
-					<button type="button" class="addNewSubject">Add a subject</button>
-				</form>
-			</div>
-			<div class="chooseSubjects">
-				<div>
-					Choose subject
+					</select>
 				</div>
-				<select class="form-control subjects">
+				<hr>
+				<div>
+					<form role="form">
+						<div class="form-group">
+			            <label for="subjectName"><div class="sub">Subject </div> </label>
+			            <input type="text" class="form-control subjectName" placeholder="Enter subject name">
+			          	</div>
+						<button type="button" class="addNewSubject">Add a subject</button>
+					</form>
+				</div>
+				<div class="chooseSubjects">
+					<div>
+						Choose subject
+					</div>
+					<select class="form-control subjects">
+						<option>
+						</option>
 
-				</select>
-			</div>
-			<div>
-				<div>
-					Notes
+					</select>
 				</div>
+				<hr>
+				<div>
+					<div>
+						Notes
+					</div>
 				</div>
 				<input type="file" accept=".pdf, .doc, .docx, .txt" id="note">
 			</div>
-			
+				
 			<div class="butt">
-				<button type="submit" class="btn btn-default">
+				<button type="submit" class="btn btn-default uploadButton">
 					
 						Upload
 				
-			</button></div>
+				</button>
+			</div>
+
+			<div class="files">
+
+			</div>
 </center> </div>
 
 
@@ -73,18 +84,19 @@
 
 			function uploadFile (chosenFile, subjectObject, callback) {
 				var file = chosenFile.files[0];
-				var name = document.getElementById("note").value;;
+				var name = document.getElementById("note").value;
 			 
-				var parseFile = new Parse.File(name, file, "application/pdf");
+				var parseFile = new Parse.File(name, file);
 				parseFile.save().then(function() {
 				  // The file has been saved to Parse.
 				  var file = Parse.Object.extend("file");
 				  var newFile = new file();
 				  newFile.set("url", parseFile.url());
+				  newFile.set("name", name);
 				  newFile.set("subject", subjectObject);
 				  newFile.save(null, {
 				  	success: function () {
-
+				  		callback();
 				  	},
 				  	error: function () {
 
@@ -95,7 +107,7 @@
 				});
 			}
 
-			$(".upload").click(function () {
+			$(".uploadButton").click(function () {
 				var fileUploadControl = $("#note")[0];
 				if (fileUploadControl.files.length > 0) {
 					searchForChosenSubject(function (subject) {
@@ -229,12 +241,20 @@
 		    	$(".subjectName").val("");
 		    }
 
+		    function clearFileInput () {
+		    	$("#note").val("");
+		    }
+
 		    function clearSchools () {
 		    	$(".schools").html("");
 		    }
 
 		    function clearSubjects () {
 		    	$(".subjects").html("");
+		    }
+
+		    function clearFiles () {
+		    	$(".files").html("");
 		    }
 
 			function searchForSchools (callback) {
@@ -291,6 +311,33 @@
 				});
 			}
 
+			function searchForFilesBasedOnSubject (subjectObject, callback) {
+				var file = Parse.Object.extend("file");
+				var fileQuery = new Parse.Query(file);
+				fileQuery.equalTo("subject", subjectObject);
+				fileQuery.include("subject");
+				fileQuery.ascending("name");
+				fileQuery.find({
+					success: function(listOfFiles) {
+						callback(listOfFiles);
+					},
+					error: function(error) {
+						if (error.code === Parse.Error.CONNECTION_FAILED) {
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find new images! Please try again.");
+					    }
+					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+					      alert("Parse is having a problem. Please try again later.");
+					    }
+					    else if (error.code === Parse.Error.TIMEOUT) {
+					      alert("The request timed out. Please try again.");
+					    }
+					    else {
+					      alert("There was an error finding subjects. Please try again.");
+					    }
+					}
+				});
+			}
+
 			function addSchoolHTMLForEach (individualSchool, schools) {
 		        var schoolObject = schools[individualSchool];
 		        $(".schools").append(
@@ -303,6 +350,12 @@
 		        $(".subjects").append(
 		          "<option>" + subjectObject.get('name') +
 		              "</option>");
+		    }
+
+		    function addFileHTMLForEach (individualFile, files) {
+		    	var fileObject = files[individualFile];
+		    	$(".files").append(
+		    		"<a href=\"" + fileObject.get("url") + "\">" + fileObject.get("name") + "</a>");
 		    }
 
 		    searchForSchools(function (schools) {
@@ -350,13 +403,25 @@
 		    $(".schools").change(function () {
 		    	searchForChosenSchool(function (school) {
 		    		searchForSubjectsBasedOnSchool(school, function (subjects) {
-		    			clearSubjects();
 		    			for (var eachSubject = 0; eachSubject < subjects.length; eachSubject++) {
 			    			addSubjectHTMLForEach(eachSubject, subjects);
 			    		}
 		    		});
 		    	});
 		    });
+
+		    $(".subjects").change(function () {
+		    	searchForChosenSubject(function (subject) {
+		    		searchForFilesBasedOnSubject(subject, function (files) {
+		    			clearFiles();
+		    			for (var eachFile = 0; eachFile < files.length; eachFile++) {
+			    			addFileHTMLForEach(eachFile, files);
+			    		}
+		    		});
+		    	});
+		    });
+
+		    clearFileInput();
 		</script>
 	</body>
 
