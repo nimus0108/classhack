@@ -10,7 +10,7 @@
             <form role="form">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="password" class="form-control registerName" id="registername" placeholder="Password">
+                    <input type="name" class="form-control registerName" id="registername" placeholder="Name">
                 </div>
                 <div class="form-group">
                     <label for="emailid">Email address</label>
@@ -24,9 +24,8 @@
                     <label for="checkpw">Confirm Password</label>
                     <input type="password" class="form-control confirmPassword" id="registerpw" placeholder="Password">
                 </div>
-            </form>
-
-            <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>            
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -50,12 +49,12 @@
                 }
             }
 
-            function getUsernameValue () {
-                return $(".registerUsername").val();
+            function getEmailValue () {
+                return $(".registerEmail").val();
                 }
 
-                function thereIsNotAUsername () {
-                if (getUsernameValue() === "") {
+            function thereIsNotAnEmail () {
+                if (getEmailValue() === "") {
                   //alert("There is not a username");
                   return true;
                 }
@@ -95,20 +94,111 @@
                 }
             }
 
+            function thePasswordsDoNotMatch () {
+                if (getPasswordValue() != getConfirmPasswordValue()) {
+                    return true;
+                }
+                return false;
+            }
+
+            function createNewUser (callback) {
+                var user = new Parse.User();
+
+                user.set("name", $(".registerName").val());
+                user.set("email", $(".registerEmail").val());
+                user.set("username", $(".registerEmail").val());
+                user.set("password", $(".registerPassword").val());
+                //user.set("emailVerified", false);
+
+                user.signUp(null, {
+                    success: function(object) {
+                        callback();
+                    },
+                    error: function(model, error) {
+                        if (error.code === Parse.Error.USERNAME_MISSING) {
+                            alert("Please enter a username.");
+                        }
+                        else if (error.code === Parse.Error.PASSWORD_MISSING) {
+                            alert("Please enter a password.");
+                        }
+                        else if (error.code === Parse.Error.EMAIL_MISSING) {
+                            alert("Please enter an email.");
+                        }
+                        else if (error.code === Parse.Error.USERNAME_TAKEN) {
+                            alert("That username has already been taken. Please use another one.");
+                        }
+                        else if (error.code === Parse.Error.EMAIL_TAKEN) {
+                            alert("That email has already been taken. Please use another one.");
+                        }
+                        else if (error.code === Parse.Error.CONNECTION_FAILED) {
+                            alert("Uh oh, we couldn't connect to the Parse Cloud! Please try again.");
+                        }
+                        else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+                            alert("Parse is having a problem. Please try again later.");
+                        }
+                        else {
+                            alert("There was an error signing up. Please try again.");
+                        }
+                    }
+                });
+            }
+
+            function login () {
+                Parse.User.logIn($(".registerEmail").val(), $(".registerPassword").val(), {
+                  success: function(user) {
+                    window.location.href = "home.html";
+                  },
+                  error: function(user, error) {
+                    if (error.code === Parse.Error.CONNECTION_FAILED) {
+                      alert("Uh oh, we couldn't connect to the Parse Cloud! Please try again.");
+                    }
+                    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+                      alert("Parse is having a problem. Please try again later.");
+                    }
+                    else {
+                      alert("There was an error logging in. Please try again.");
+                    }
+                  }
+                });
+            }
+
             $("form").on("submit", function(e) {
                 e.preventDefault();
 
                 if (thereIsNotAName()) {
-                  alert("Please enter a name");
+                    alert("Please enter a name");
                 }
-                else if (thereIsNotAUsername()) {
-                  alert("Please enter a username");
+                else if (thereIsNotAnEmail()) {
+                    alert("Please enter an email");
                 }
                 else if (thereIsNotAPassword()) {
-                  alert("Please enter a password");
+                    alert("Please enter a password");
                 }
                 else if (thereIsNotAConfirmPassword()) {
-                  alert("Please confirm your password");
+                    alert("Please confirm your password");
+                }
+                else if (thePasswordsDoNotMatch()) {
+                    alert("The passwords do not match");
+                }
+                else {
+                    createNewUser (function () {
+                        Parse.User.logIn($(".registerEmail").val(), $(".registerPassword").val(), {
+                          success: function(user) {
+                            window.location.href = "home.html";
+                          },
+                          error: function(user, error) {
+                            if (error.code === Parse.Error.CONNECTION_FAILED) {
+                              alert("Uh oh, we couldn't connect to the Parse Cloud! Please try again.");
+                            }
+                            else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+                              alert("Parse is having a problem. Please try again later.");
+                            }
+                            else {
+                              alert("There was an error logging in. Please try again.");
+                            }
+                          }
+                        });
+                    });
                 }
             });
 

@@ -24,12 +24,12 @@
 	    <script type="text/javascript">
 	      Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
 
-	      function getUsernameValue () {
+	      function getEmailValue () {
 	        return $(".loginEmail").val();
 	      }
 
-	      function thereIsNotAUsername () {
-	        if (getUsernameValue() === "") {
+	      function thereIsNotAnEmail () {
+	        if (getEmailValue() === "") {
 	          //alert("There is not a username");
 	          return true;
 	        }
@@ -54,17 +54,8 @@
 	        }
 	      }
 
-	      $("form").on("submit", function(e) {
-	        e.preventDefault();
-
-	        if (thereIsNotAnEmail()) {
-	          alert("Please enter an email");
-	        }
-	        else if (thereIsNotAPassword()) {
-	          alert("Please enter a password");
-	        }
-	        else {
-	          Parse.User.logIn($(".loginEmail").val(), $(".loginPassword").val(), {
+	      function login () {
+	      	Parse.User.logIn($(".loginEmail").val(), $(".loginPassword").val(), {
 	            success: function(user) {
 	              window.location.href = 'home.html';
 	            },
@@ -85,7 +76,20 @@
 	                alert("Error logging in. Please try again.");
 	              }
 	            }
-	          })
+	        });
+	      }
+
+	      $("form").on("submit", function(e) {
+	        e.preventDefault();
+
+	        if (thereIsNotAnEmail()) {
+	          alert("Please enter an email");
+	        }
+	        else if (thereIsNotAPassword()) {
+	          alert("Please enter a password");
+	        }
+	        else {
+	        	login();
 	        }
 
 	      });
