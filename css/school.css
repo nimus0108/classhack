@@ -24,10 +24,11 @@ body{
 	color:#fff;
 }
 
-.butt{
-   margin-top: 20px;
+.btn-default{
+   margin-top: 33px;
     background-color: transparent;
-    font-size: 200px;
+    font-size: 40px;
+    padding: 10%;
 
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
@@ -37,5 +38,6 @@ body{
 }
 
 .btn-default:hover{
-   background-color: #f0f;
+   background-color: #000000;
+   color:#000;
 }
