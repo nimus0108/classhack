@@ -1,0 +1,29 @@
+html {
+    height: 100%;
+}
+
+body{
+    font-family: 'Ubuntu', sans-serif;
+    background-image: url('../img/mainpagebackground.jpg');
+    color: #fff;
+}
+
+.res-page{
+    display: table;
+    background-image:url("../img/mainpagebackground.jpg");
+    height: 100%;
+    width: 100%;
+    background-size:cover;
+    background-repeat: no-repeat;
+    
+}
+
+body a{
+    color: white;
+    font-size: 4.0em;
+    
+}
+
+body a:hover {
+    text-decoration: none;
+}
