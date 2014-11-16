@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+<body>
+<div class= "title">
+<h1>About us!</h1> </div>
+<div class= "sub-title">
+<h2>Meet the team who brought your dreams to life</h2> </div>
+
+<h3> Ali Malik </h3>
+<p> Ali is one of the talented hackers in this 3 man and 2 interns group. Ali helped made the CSS and HTML come to life! He's been going to hackathons for a year now, and hackRPI is his 3rd hackathon.</p>
+
+<h3> Long Vicki </h3>
+<p> Vicki is one of the most important members on the team, she coded the entire back-end of our website. Without her, this website wouldn't have been possible. HackRPI is her 5th hackathon!</p>
+
+<h3> Su Min Kim </h3>
+<p> Su Min helped Ali out (or vise versa, depending on how you look at it ;D ) with the HTML and CSS, also known as the front-end development. HackRPI is her second hackathon!</p>
+
+<h3> Sumit Vohra </h3>
+<p> Sumit is one of the newbies at the art of hackathons, meaning this is was his first hackathon. He mostly observed and boasted everyone's morall, and he was a great addition to the team!</p>
+
+<h3> Anish Nayak </h3>
+<p> Anish is also a newbies at the art of hackathons! He came along with Sumit, on a quest to learn the ways of the programmer and he has learned a lot! Just like Sumit, we were glad to have him on the team!</p>
+
+<p> You may be wondering why our team consisted of 5 people. Well we got special permission from an advisor, to take in the two newbies and have a awesome group of 5! </p>
+</body>
+
+
+</html>

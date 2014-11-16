@@ -7,6 +7,20 @@ body{
     font-family: 'Ubuntu', sans-serif;
 
 }
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 2%;
+}
+
+li {
+    display: inline;
+    float: right;
+    padding-right: 1%;
+    padding-left: 1%;
+    vertical-align: middle;
+    padding-top: 0;
+}
 
 .mainpage{
     display: table;
@@ -86,4 +100,12 @@ body a:hover {
 
 #note {
     margin-bottom: 0px;
+}
+
+.nav-bar a{
+    font-size: 1.5em;
+}
+
+#navbar {
+    background-color: #333;
 }
