@@ -1,5 +1,5 @@
 body{
-	background-image: url('../img/tri.jpg');
+	background-image: url('../img/hack.jpg');
 	background-size: cover;
 }
 
@@ -22,7 +22,7 @@ p{
 .ali{
 	width: 300px;
   margin: 35px;
-  background: rgba(0,63,76,0.7);
+  background: rgba(192,192,192,0.4);
   padding: 35px;
   border-radius: 50px
 }
@@ -30,7 +30,7 @@ p{
 .long{
 	width: 300px;
   margin: 35px;
-  background: rgba(0,63,76,0.7);
+  background: rgba(192,192,192,0.4);
   padding: 35px;
   border-radius: 50px
 }
@@ -38,7 +38,7 @@ p{
 .su{
 	width: 300px;
   margin: 35px;
-  background: rgba(0,63,76,0.7);
+  background: rgba(192,192,192,0.4);
   padding: 35px;
   border-radius: 50px
 }
@@ -46,7 +46,7 @@ p{
 .sumit{
 	width: 300px;
   margin: 35px;
-  background: rgba(0,63,76,0.7);
+  background: rgba(192,192,192,0.4);
   padding: 35px;
   border-radius: 50px
 }
@@ -54,7 +54,15 @@ p{
 .anish{
 	width: 300px;
   margin: 35px;
-  background: rgba(0,63,76,0.7);
+  background: rgba(192,192,192,0.4);
   padding: 35px;
   border-radius: 50px
+}
+
+.title{
+	color: #007FFF;
+}
+
+.sub-title{
+	color: #007FFF;
 }
