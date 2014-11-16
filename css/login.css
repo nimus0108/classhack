@@ -18,7 +18,8 @@ body{
 
 .account{
     font-size: 30px;
-    color: #097054;
+    color: #097054;x
+    font-family: 'Kaushan Script', cursive;
 }
 
 .login{

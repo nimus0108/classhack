@@ -15,6 +15,7 @@ body{
     width: 100%;
     background-size:cover;
     background-repeat: no-repeat;
+    
 }
 
 .main-container {
@@ -32,14 +33,27 @@ body{
     font-size: 2.0em;
     text-align: center;
     height: auto;
+    margin-bottom: 5%;
 }
 
+.main-content h3 {
+    font-size: 3em;
+}
 .mpbtn {
-    width: 20em;
+  width: 20em;
     height: 5em;
     background-color: transparent;
     border: 1px solid #fff;
     margin-top: 40px;
+    padding: 0% 2% 0.5% 2%; 
+    
+    -webkit-transition: all .5s ease;
+-moz-transition: all .5s ease;
+-ms-transition: all .5s ease;
+-o-transition: all .5s ease;
+transition: all .5s ease;
+    border: 1px solid #fff;
+    
 }
 /*
 .mainpage h1{
