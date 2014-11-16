@@ -4,10 +4,6 @@ html {
 body{
     height: 100%;
     font-family: 'Ubuntu', sans-serif;
-
-}
-
-body{
     display: table;
     background-image:url("../img/mainpagebackground.jpg");
     height: 100%;
@@ -25,9 +21,10 @@ body{
 .login{
     width: 300px;
     margin: 40px;
-    background: rgba(0,0,25,0.4);
+    background: rgba(0,0,25,0.7);
     padding: 45px;
     margin-bottom: auto;
+    color: #FFF;
 
   /* border-radius: 50px; */
 }
