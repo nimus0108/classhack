@@ -82,6 +82,8 @@
 		<script type="text/javascript">
 			Parse.initialize("tqnWNHYhxb1Kv2HMkWAzSalvX5VObkXUQVnLNFE5", "ZfSOW83SOAavlo6JgqSRTIiiSRiROH65UzQ97Rre");
 
+			var currentSchool;
+
 			function uploadFile (chosenFile, subjectObject, callback) {
 				var file = chosenFile.files[0];
 				var name = $("#note").val().split('\\').pop();
@@ -110,9 +112,11 @@
 			$(".uploadButton").click(function () {
 				var fileUploadControl = $("#note")[0];
 				if (fileUploadControl.files.length > 0) {
-					searchForChosenSubject(function (subject) {
-						uploadFile(fileUploadControl, subject, function () {
-							location.reload();
+					searchForChosenSchool(function (school) {
+						searchForChosenSubject(function (subject) {
+							uploadFile(fileUploadControl, subject[0], function () {
+								location.reload();
+							});
 						});
 					});
 				}
@@ -151,6 +155,31 @@
 		    	});
 		    }
 
+		    function searchForInputSchool (callback) {
+				var inputSchool = Parse.Object.extend("school");
+				var inputSchoolQuery = new Parse.Query(inputSchool);
+				inputSchoolQuery.equalTo("name", getSchoolInputValue());
+				inputSchoolQuery.find({
+					success: function(school) {
+						callback(school);
+					},
+					error: function(error) {
+						if (error.code === Parse.Error.CONNECTION_FAILED) {
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find schools! Please try again.");
+					    }
+					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+					      alert("Parse is having a problem. Please try again later.");
+					    }
+					    else if (error.code === Parse.Error.TIMEOUT) {
+					      alert("The request timed out. Please try again.");
+					    }
+					    else {
+					      alert("There was an error finding the school. Please try again.");
+					    }
+					}
+				});
+			}
+
 		    function searchForChosenSchool (callback) {
 				var chosenSchool = Parse.Object.extend("school");
 				var chosenSchoolQuery = new Parse.Query(chosenSchool);
@@ -176,11 +205,12 @@
 				});
 			}
 
-			function searchForChosenSubject (callback) {
-				var chosenSubject = Parse.Object.extend("subject");
-				var chosenSubjectQuery = new Parse.Query(chosenSubject);
-				chosenSubjectQuery.equalTo("name", getSubjectValue());
-				chosenSubjectQuery.first({
+			function searchForInputSubject (schoolObject, callback) {
+				var inputSubject = Parse.Object.extend("subject");
+				var inputSubjectQuery = new Parse.Query(inputSubject);
+				inputSubjectQuery.equalTo("name", getSubjectInputValue());
+				//inputSubjectQuery.equalTo("school", schoolObject);
+				inputSubjectQuery.find({
 					success: function(subject) {
 						callback(subject);
 					},
@@ -195,7 +225,33 @@
 					      alert("The request timed out. Please try again.");
 					    }
 					    else {
-					      alert("There was an error finding the subject. Please try again.");
+					      alert("There was an error finding the input subject. Please try again.");
+					    }
+					}
+				});
+			}
+
+			function searchForChosenSubject (schoolObject, callback) {
+				var chosenSubject = Parse.Object.extend("subject");
+				var chosenSubjectQuery = new Parse.Query(chosenSubject);
+				chosenSubjectQuery.equalTo("name", getSubjectValue());
+				chosenSubjectQuery.equalTo("school", schoolObject);
+				chosenSubjectQuery.find({
+					success: function(subject) {
+						callback(subject);
+					},
+					error: function(error) {
+						if (error.code === Parse.Error.CONNECTION_FAILED) {
+					      alert("Uh oh, we couldn't connect to the Parse Cloud to find subjects! Please try again.");
+					    }
+					    else if (error.code === Parse.Error.INTERNAL_SERVER_ERROR) {
+					      alert("Parse is having a problem. Please try again later.");
+					    }
+					    else if (error.code === Parse.Error.TIMEOUT) {
+					      alert("The request timed out. Please try again.");
+					    }
+					    else {
+					      alert("There was an error finding the chosen subject. Please try again.");
 					    }
 					}
 				});
@@ -246,11 +302,11 @@
 		    }
 
 		    function clearSchools () {
-		    	$(".schools").html("");
+		    	$(".schools").html("<option></option>");
 		    }
 
 		    function clearSubjects () {
-		    	$(".subjects").html("");
+		    	$(".subjects").html("<option></option>");
 		    }
 
 		    function clearFiles () {
@@ -365,7 +421,7 @@
 		    });
 
 		    $(".addNewSchool").click(function() {
-		    	searchForChosenSchool(function (school) {
+		    	searchForInputSchool(function (school) {
 		    		if (schoolInputIsEmpty()) {
 			    		alert("Please enter a school");
 			    	}
@@ -387,27 +443,36 @@
 		    });
 
 		    $(".addNewSubject").click(function() {
-		    	if (subjectInputIsEmpty()) {
-		    		alert("Please enter a subject");
-		    	}
-		    	else {
-			    	searchForChosenSchool(function (school) {
-				    	addSubject(school[0], function () {
-				    		clearSubjectInput();
-			    			clearSubjects();
-			    			searchForSubjectsBasedOnSchool (school[0], function (listOfSubjects) {
-			    				for (var eachSubject = 0; eachSubject < listOfSubjects.length; eachSubject++) {
-						    		addSubjectHTMLForEach(eachSubject, listOfSubjects);
-						    	}
-			    			});
-					    });
-			    	});
-			    }
+		    	searchForChosenSchool(function (school) {
+			    	searchForInputSubject(school[0], function (subject) {
+			    		if (schoolInputIsEmpty()) {
+			    			alert("Please choose a school");
+			    		}
+				    	else if (subjectInputIsEmpty()) {
+				    		alert("Please enter a subject");
+				    	}
+				    	else if (subject.length > 0) {
+				    		alert("Subject already exists");
+				    	}
+				    	else {
+					    	addSubject(school[0], function () {
+					    		clearSubjectInput();
+				    			clearSubjects();
+				    			searchForSubjectsBasedOnSchool (school[0], function (listOfSubjects) {
+				    				for (var eachSubject = 0; eachSubject < listOfSubjects.length; eachSubject++) {
+							    		addSubjectHTMLForEach(eachSubject, listOfSubjects);
+							    	}
+				    			});
+						    });
+					    }
+					});
+			    });
 		    });
 
 		    $(".schools").change(function () {
 		    	searchForChosenSchool(function (school) {
 		    		searchForSubjectsBasedOnSchool(school[0], function (subjects) {
+		    			clearSubjects();
 		    			for (var eachSubject = 0; eachSubject < subjects.length; eachSubject++) {
 			    			addSubjectHTMLForEach(eachSubject, subjects);
 			    		}
@@ -416,14 +481,16 @@
 		    });
 
 		    $(".subjects").change(function () {
-		    	searchForChosenSubject(function (subject) {
-		    		searchForFilesBasedOnSubject(subject, function (files) {
-		    			clearFiles();
-		    			for (var eachFile = 0; eachFile < files.length; eachFile++) {
-			    			addFileHTMLForEach(eachFile, files);
-			    		}
-		    		});
-		    	});
+		    	searchForChosenSchool(function (school) {
+			    	searchForChosenSubject(school[0], function (subject) {
+			    		searchForFilesBasedOnSubject(subject[0], function (files) {
+			    			clearFiles();
+			    			for (var eachFile = 0; eachFile < files.length; eachFile++) {
+				    			addFileHTMLForEach(eachFile, files);
+				    		}
+			    		});
+			    	});
+			    });
 		    });
 
 		    clearSchoolInput();
