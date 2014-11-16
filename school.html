@@ -285,6 +285,13 @@
 		    	return false;
 		    }
 
+		    function chosenSchoolIsEmpty () {
+		    	if (getSchoolValue() === "") {
+		    		return true;
+		    	}
+		    	return false;
+		    }
+
 		    function clearSchoolInput () {
 		    	$(".schoolName").val("");
 		    }
@@ -441,7 +448,7 @@
 		    $(".addNewSubject").click(function() {
 		    	searchForChosenSchool(function (school) {
 			    	searchForInputSubject(school[0], function (subject) {
-			    		if (schoolInputIsEmpty()) {
+			    		if (chosenSchoolIsEmpty()) {
 			    			alert("Please choose a school");
 			    		}
 				    	else if (subjectInputIsEmpty()) {
