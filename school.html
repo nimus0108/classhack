@@ -109,9 +109,14 @@
 				var fileUploadControl = $("#note")[0];
 				if (fileUploadControl.files.length > 0) {
 					searchForChosenSchool(function (school) {
-						searchForChosenSubject(function (subject) {
+						searchForChosenSubject(school[0], function (subject) {
 							uploadFile(fileUploadControl, subject[0], function () {
-								location.reload();
+								searchForFilesBasedOnSubject(subject[0], function (files) {
+					    			clearFiles();
+					    			for (var eachFile = 0; eachFile < files.length; eachFile++) {
+						    			addFileHTMLForEach(eachFile, files);
+						    		}
+			    				});
 							});
 						});
 					});
