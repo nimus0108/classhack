@@ -155,7 +155,7 @@
 				var chosenSchool = Parse.Object.extend("school");
 				var chosenSchoolQuery = new Parse.Query(chosenSchool);
 				chosenSchoolQuery.equalTo("name", getSchoolValue());
-				chosenSchoolQuery.first({
+				chosenSchoolQuery.find({
 					success: function(school) {
 						callback(school);
 					},
@@ -365,20 +365,25 @@
 		    });
 
 		    $(".addNewSchool").click(function() {
-		    	if (schoolInputIsEmpty()) {
-		    		alert("Please enter a school");
-		    	}
-		    	else {
-			    	addSchool(function () {
-			    		clearSchoolInput();
-			    		clearSchools();
-				    	searchForSchools(function (schools) {
-					    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
-					    		addSchoolHTMLForEach(eachSchool, schools);
-					    	}
-					    });
-			    	});
-			    }
+		    	searchForChosenSchool(function (school) {
+		    		if (schoolInputIsEmpty()) {
+			    		alert("Please enter a school");
+			    	}
+			    	else if (school.length > 0) {
+			    		alert("There is already a school with that name");
+			    	}
+			    	else {
+				    	addSchool(function () {
+				    		clearSchoolInput();
+				    		clearSchools();
+					    	searchForSchools(function (schools) {
+						    	for (var eachSchool = 0; eachSchool < schools.length; eachSchool++) {
+						    		addSchoolHTMLForEach(eachSchool, schools);
+						    	}
+						    });
+				    	});
+				    }
+		    	});
 		    });
 
 		    $(".addNewSubject").click(function() {
@@ -387,10 +392,10 @@
 		    	}
 		    	else {
 			    	searchForChosenSchool(function (school) {
-				    	addSubject(school, function () {
+				    	addSubject(school[0], function () {
 				    		clearSubjectInput();
 			    			clearSubjects();
-			    			searchForSubjectsBasedOnSchool (school, function (listOfSubjects) {
+			    			searchForSubjectsBasedOnSchool (school[0], function (listOfSubjects) {
 			    				for (var eachSubject = 0; eachSubject < listOfSubjects.length; eachSubject++) {
 						    		addSubjectHTMLForEach(eachSubject, listOfSubjects);
 						    	}
@@ -402,7 +407,7 @@
 
 		    $(".schools").change(function () {
 		    	searchForChosenSchool(function (school) {
-		    		searchForSubjectsBasedOnSchool(school, function (subjects) {
+		    		searchForSubjectsBasedOnSchool(school[0], function (subjects) {
 		    			for (var eachSubject = 0; eachSubject < subjects.length; eachSubject++) {
 			    			addSubjectHTMLForEach(eachSubject, subjects);
 			    		}
@@ -421,6 +426,8 @@
 		    	});
 		    });
 
+		    clearSchoolInput();
+		    clearSubjectInput();
 		    clearFileInput();
 		</script>
 	</body>
